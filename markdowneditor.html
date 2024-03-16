@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown エディター</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* エディター部分のスタイル */
+        .editor-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .editor {
+            flex: 1;
+            background-color: #343541;
+            color: #fffffe;
+            padding: 10px;
+            box-sizing: border-box;
+            resize: none; /* リサイズ不可に設定 */
+            border: none; /* 枠線を削除 */
+            font-size: 16px; /* フォントサイズ設定 */
+            font-family: 'Arial', sans-serif; /* フォントファミリー設定 */
+            overflow: auto; /* 高さが超過した場合にスクロールバーを表示 */
+        }
+
+        /* プレビュー部分のスタイル */
+        .preview-container {
+            flex: 1;
+            background-color: #121317;
+            color: #e2e8f0;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow: auto; /* 高さが超過した場合にスクロールバーを表示 */
+            white-space: pre-wrap; /* テキスト内の改行を反映させる */
+        }
+
+        /* ボタンのスタイル */
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .button-container button {
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #1e1e1e; /* ダークモードに適した色 */
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="editor-container">
+            <textarea id="markdown-input" class="editor" placeholder="ここに Markdown 記法を入力"></textarea>
+            <div class="preview-container" id="preview-output"></div>
+        </div>
+        <div class="button-container">
+            <button id="save-button">保存</button>
+            <button class="toggle-button" id="toggle-preview">HTMLコードを表示する</button>
+        </div>
+    </div>
+
+    <script>
+        const markdownInput = document.getElementById('markdown-input');
+        const previewOutput = document.getElementById('preview-output');
+        const toggleButton = document.getElementById('toggle-preview');
+        const saveButton = document.getElementById('save-button');
+        const md = window.markdownit(); // Markdown変換オブジェクトを作成
+
+        // MarkdownをHTMLに変換してプレビューを更新する関数
+        function updatePreview() {
+            const markdownText = markdownInput.value;
+            const convertedHTML = md.render(markdownText); // MarkdownをHTMLに変換
+            previewOutput.innerHTML = convertedHTML;
+        }
+
+        // 表示切り替えボタンをクリックしたときの処理
+        toggleButton.addEventListener('click', () => {
+            if (toggleButton.textContent === 'HTMLコードを表示する') {
+                toggleButton.textContent = 'プレビューを表示する';
+                previewOutput.textContent = previewOutput.innerHTML; // HTMLコード表示
+            } else {
+                toggleButton.textContent = 'HTMLコードを表示する';
+                updatePreview(); // プレビューを更新
+            }
+        });
+
+        // 保存ボタンをクリックしたときの処理
+        saveButton.addEventListener('click', () => {
+            const markdownContent = markdownInput.value;
+            localStorage.setItem('markdownContent', markdownContent); // ローカルストレージにMarkdownを保存
+            alert('保存しました。');
+        });
+
+        // ページ読み込み時に保存されたMarkdownがあれば、エディターに表示する
+        window.addEventListener('load', () => {
+            const savedMarkdown = localStorage.getItem('markdownContent');
+            if (savedMarkdown) {
+                markdownInput.value = savedMarkdown;
+                updatePreview(); // プレビューを更新
+            }
+        });
+
+        markdownInput.addEventListener('input', updatePreview);
+    </script>
+</body>
+</html>

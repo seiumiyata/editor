@@ -22,7 +22,9 @@
             border: none; /* 枠線を削除 */
             font-size: 16px; /* フォントサイズ設定 */
             font-family: 'Arial', sans-serif; /* フォントファミリー設定 */
-            overflow: auto; /* 高さが超過した場合にスクロールバーを表示 */
+            overflow-y: auto; /* 高さが超過した場合に縦方向のスクロールバーを表示 */
+            white-space: pre-wrap; /* テキスト内の改行を反映させる */
+            word-wrap: break-word; /* 単語が画面に収まらない場合に自動で折り返す */
         }
 
         /* プレビュー部分のスタイル */
@@ -32,8 +34,9 @@
             color: #e2e8f0;
             padding: 10px;
             box-sizing: border-box;
-            overflow: auto; /* 高さが超過した場合にスクロールバーを表示 */
+            overflow-y: auto; /* 高さが超過した場合に縦方向のスクロールバーを表示 */
             white-space: pre-wrap; /* テキスト内の改行を反映させる */
+            word-wrap: break-word; /* 単語が画面に収まらない場合に自動で折り返す */
         }
 
         /* ボタンのスタイル */
